@@ -259,8 +259,6 @@ The best model has an accuracy of 0.75
 
 Best runs from both the models are registered
 
-![model_list](https://user-images.githubusercontent.com/26400438/127418941-5187b1e9-2f67-4cee-9419-8d250b6fed3d.PNG)
-
 Comparing the performances of the Best models from the AutoML Run and the Hyperdrive Run
 
 | Method      | Primary Metric |
