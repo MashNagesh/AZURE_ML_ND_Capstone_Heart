@@ -72,18 +72,23 @@ Reference:https://inclusive-ai.medium.com/how-to-use-kaggle-api-with-azure-machi
 #### Choice of AutoML Settings:
 
 1. n_cross_validation
+
 Indicates how many cross validations to perform and in our case splitting it into 5 portions will ensure that we have ~8000 records for training and ~2000 for validation.
 
 2. Primary Metric
+
 Primary metric chosen here is accuracy to understand how much of the sample has been correctly classified.We could also use AUC as metric where we can see multiple one versus all Precision recall curves for each of the MNIST digits
 
 3. enable early stopping
+
 Early stopping is enabled to prevent overfitting
 
 4. Experiment Stop time
+
 To handle costs and time
 
 5. Remote compute
+
 Going for Remote Compute to avoid dependency issues which came up while using Local compute
 
 ### Results
@@ -193,7 +198,7 @@ Parameters of the Best Model - Voting Ensemble.The best model is a combination o
 
 2.*Primary Metric* : The Primary metric used is Accuracy.The dataset provided is an imbalanced dataset hence accuracy is not an appropriate metric.Also since the implications of missing out on predicting a death_event is huge it is important to chose our metric which places emplasis on **higher recall** rate since it would be costly to miss a death event.High Recall would be a better metric
 
-3.*Time* : experiment_timeout_minutes si 20 minutes and can be extended to check performances of other models
+3.*Time* : experiment_timeout_minutes is 20 minutes and can be extended to check performances of other models
 
 #### Best Model trained Metrics:
 The Primary metric used for model evaluation is Accuracy in this case.However we are able to see good values across multiple evlauation metrics for the best model
@@ -212,6 +217,7 @@ MedianStopping is a Conservative policy that provides savings without terminatin
 The sampling Policy used is a Random Sampling Policy since the grid search suffers from limitations pertaining to higher dimensionality issues and Random Sampling though it functions very similar to grid search has been able to provide equal or better results in many scenarios. The chances of finding the optimal parameter are comparatively higher in random search because of the random search pattern where the model might end up being trained on the optimised parameters.
 
 Range and values of Parameters as stated below 
+
 'C': uniform(0.1, 10),'max_iter': choice(50,100,200,300)
 
 #### Hyperparamters
