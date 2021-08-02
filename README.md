@@ -303,6 +303,10 @@ Using the run function returns the response.
 
 ![image](https://user-images.githubusercontent.com/26400438/127841262-06c099c6-7e3e-4098-b354-f965318afb00.png)
 
+#### Sending a Request and recieving an output (using the Requests method)
+
+![image](https://user-images.githubusercontent.com/26400438/127871819-2ba60e3e-0641-4f80-91ab-738000041a94.png)
+
 #### Log of Web Service
 
 ![image](https://user-images.githubusercontent.com/26400438/127841365-529eda83-2dd1-4310-9326-ad2bab01f641.png)
