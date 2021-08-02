@@ -15,9 +15,9 @@ This Capstone project is part of the Azure ML Engineer NanoDegree.The Key compon
 This dataset contains 12 features that can be used to predict mortality by heart failure (indicated by the variable DEATH_EVENT).
 Below are the feaures
 
-1. age
+1.age
 
-2. anaemia
+2.anaemia
 
 3.creatinine_phosphokinase
 
@@ -105,7 +105,7 @@ Parameters of the Best Model - Voting Ensemble.The best model is a combination o
 
 1.SparseNormalizer, XG Boost(0.4) -
 
-{
+    {
         "booster": "gbtree",
         "colsample_bytree": 0.9,
         "eta": 0.3,
@@ -121,6 +121,7 @@ Parameters of the Best Model - Voting Ensemble.The best model is a combination o
     }
 
 2.StandardScalerWrapper, Random Forest(0.1) -
+    
     {
         "bootstrap": false,
         "class_weight": null,
@@ -180,7 +181,9 @@ Parameters of the Best Model - Voting Ensemble.The best model is a combination o
         "oob_score": false
     }
 
-6.MaxAbsScaler, Light GBM (0.1) - :"min_data_in_leaf" : 20}
+6.MaxAbsScaler, Light GBM (0.1) - :
+        
+        {"min_data_in_leaf" : 20}
 
 
 
@@ -188,9 +191,9 @@ Parameters of the Best Model - Voting Ensemble.The best model is a combination o
 
 1.*Limitations of the Data set* :The dataset has close to 300 records which is a very small sample for an ML model and also we ahve only 12 columns provided which is not an exhaustive medical record for a person.There could be other variables which could act as highly predictive features.
 
-2. *Primary Metric* : The Primary metric used is Accuracy.The dataset provided is an imbalanced dataset hence accuracy is not an appropriate metric.Also since the implications of missing out on predicting a death_event is huge it is important to chose our metric which places emplasis on **higher recall** rate since it would be costly to miss a death event.High Recall would be a better metric
+2.*Primary Metric* : The Primary metric used is Accuracy.The dataset provided is an imbalanced dataset hence accuracy is not an appropriate metric.Also since the implications of missing out on predicting a death_event is huge it is important to chose our metric which places emplasis on **higher recall** rate since it would be costly to miss a death event.High Recall would be a better metric
 
-3. *Time* : experiment_timeout_minutes si 20 minutes and can be extended to check performances of other models
+3.*Time* : experiment_timeout_minutes si 20 minutes and can be extended to check performances of other models
 
 #### Best Model trained Metrics:
 The Primary metric used for model evaluation is Accuracy in this case.However we are able to see good values across multiple evlauation metrics for the best model
