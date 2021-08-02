@@ -12,15 +12,41 @@ This Capstone project is part of the Azure ML Engineer NanoDegree.The Key compon
 ## Dataset
 
 ### Overview
-The data used for this project is the famous MNIST dataset.It is a dataset of 60,000 small square 28×28 pixel grayscale images of handwritten single digits between 0 and 9
+This dataset contains 12 features that can be used to predict mortality by heart failure (indicated by the variable DEATH_EVENT).
+Below are the feaures
 
-Source of the data: https://www.kaggle.com/c/digit-recognizer/data
+1. age
+
+2. anaemia
+
+3.creatinine_phosphokinase
+
+4.diabetes
+
+5.ejection_fraction
+
+6.high_blood_pressure
+
+7.platelets
+
+8.serum_creatinine
+
+9.serum_sodium
+
+10.sex
+
+11.smoking
+
+12.time
+
+
+Source of the data: https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv
 
 
 ### Task
-To predict the digit(0-9) in the label column 
+To predict the DEATH_EVENT  column 
 
-The training data set, (train.csv), has 785 columns. The first column, called "label", is the digit that was drawn by the user. The rest of the columns contain the pixel-values of the associated image.The objective is to predict the label column using the other columns which provide the Pixel values
+The training data set, (train.csv), has 13 columns. The first column, called 'DEATH_EVENT'which is the dependent variable. The Other columsn provide medical features of a person.The objective is to predict the DEATH_EVENT column using the other columns which provide the medical condition.
 
 ### Access
 The data is accessed in the AzureML notebook using Kaggle API.
@@ -57,48 +83,119 @@ Early stopping is enabled to prevent overfitting
 4. Experiment Stop time
 To handle costs and time
 
-5. Local compute
-Going for the Local compute since we can pass dataframes and also to not create a separate compute (better cost)
+5. Remote compute
+Going for Remote Compute to avoid dependency issues which came up while using Local compute
 
 ### Results
-Below are the models which have been chosen by Azure ML for this experiment
+There are about 11 models which have run as a part of this experiment.
 
-1.Voting Ensemble
+Voting Ensemble is the top performing model w.r.t the Primary metric.
 
-2.Stack Ensemble
+The Ensemble models perform better as opposed to the individual models since they combine bagging,bosting and stacking to provide the results.
+They also combine the results and minimise the variance component of the error.
 
-3.Max ABS scaler/Light GBM
-
-4.Max ABS scaler/XGBoost Classifier
-
-5.Random Forest
-
-The Ensemble models perform better as opposed to the individual models since they combine bagging,bosting and stacking to provide the results. They also combine the results and minimise the variance component of the error
 
 #### Results from AUTOML run using RunDetails
 The Voting Ensemble models performs the best interms of the Primary Metric - Accuracy
 
-![RunWidget](https://user-images.githubusercontent.com/26400438/127309495-ac6ac341-9556-48d6-aeed-8c8f17344850.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127836178-e9a80615-a885-4a09-b7a2-f259cd44ac93.png)
 
 #### Best Model trained Parameters
-Parameters of the Best Model - Voting Ensemble.The best model is a combination of 
+Parameters of the Best Model - Voting Ensemble.The best model is a combination of the below submodels with appropriate weights mentioned in the brackets
 
-1.Max ABS Scaler, XGBoost Classifier
-Parameter used - tree_method ='auto'
+1.SparseNormalizer, XG Boost(0.4) -
 
-2.MAX ABS Sclaer Light GBM
-Parameter used - min_data_in_leaf =20
+{
+        "booster": "gbtree",
+        "colsample_bytree": 0.9,
+        "eta": 0.3,
+        "gamma": 0,
+        "max_depth": 10,
+        "max_leaves": 15,
+        "n_estimators": 25,
+        "objective": "reg:logistic",
+        "reg_alpha": 0,
+        "reg_lambda": 0.5208333333333334,
+        "subsample": 0.6,
+        "tree_method": "auto"
+    }
+
+2.StandardScalerWrapper, Random Forest(0.1) -
+    {
+        "bootstrap": false,
+        "class_weight": null,
+        "criterion": "entropy",
+        "max_features": 0.2,
+        "min_samples_leaf": 0.01,
+        "min_samples_split": 0.10368421052631578,
+        "n_estimators": 25,
+        "oob_score": false
+    }
+
+3.MaxAbsScaler, Gradient Boosting(0.1) -
+
+    {
+        "criterion": "friedman_mse",
+        "learning_rate": 0.046415888336127774,
+        "max_depth": 4,
+        "max_features": 0.4,
+        "min_samples_leaf": 0.08736842105263157,
+        "min_samples_split": 0.5252631578947369,
+        "n_estimators": 100,
+        "subsample": 1
+    }
+
+
+4.MinMaxScaler, SVM (0.1) -
+    
+    {
+        "C": 159.98587196060572,
+        "class_weight": null,
+        "kernel": "rbf"
+    }
+
+5.MinMaxScaler, RandomForest (0.1)-
+    
+    {
+        "bootstrap": true,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_features": "sqrt",
+        "min_samples_leaf": 0.035789473684210524,
+        "min_samples_split": 0.01,
+        "n_estimators": 10,
+        "oob_score": true
+    }
+
+6.MinMaxScaler, RandomForest (0.1) - 
+
+    {
+        "bootstrap": false,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_features": "sqrt",
+        "min_samples_leaf": 0.01,
+        "min_samples_split": 0.10368421052631578,
+        "n_estimators": 10,
+        "oob_score": false
+    }
+
+6.MaxAbsScaler, Light GBM (0.1) - :"min_data_in_leaf" : 20}
+
+
 
 #### Scope of Improvement:
 
-1.We can use a larger training data. For this experiment only 10,000 records have been considered and given that we have 0-9 digits only a sample of roughly 1000 is available per digit.
+1.*Limitations of the Data set* :The dataset has close to 300 records which is a very small sample for an ML model and also we ahve only 12 columns provided which is not an exhaustive medical record for a person.There could be other variables which could act as highly predictive features.
 
-2.Use Deep Learning models in AUTOML.("enable_dnn": True in automl_settings)
+2. *Primary Metric* : The Primary metric used is Accuracy.The dataset provided is an imbalanced dataset hence accuracy is not an appropriate metric.Also since the implications of missing out on predicting a death_event is huge it is important to chose our metric which places emplasis on **higher recall** rate since it would be costly to miss a death event.High Recall would be a better metric
+
+3. *Time* : experiment_timeout_minutes si 20 minutes and can be extended to check performances of other models
 
 #### Best Model trained Metrics:
 The Primary metric used for model evaluation is Accuracy in this case.However we are able to see good values across multiple evlauation metrics for the best model
 
-![best_run_metrics](https://user-images.githubusercontent.com/26400438/127309974-2170828f-555b-4dd6-b77a-467040868e2a.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127838665-8d3620fe-968e-4543-bd87-82b072e06bcc.png)
 
 ## Hyperparameter Tuning
 
@@ -126,29 +223,26 @@ Max_iter - Maximum number of iterations to converge
 
 Below are the results from the HyperDrive model
 
-#### Run Details Widget - Model Running
-![HyperDrive_Run_Details_Widget_2](https://user-images.githubusercontent.com/26400438/127315201-2d719767-2186-46ef-91ef-a4e4b4249fc7.PNG)
+#### Run Details Widget - Models
+![image](https://user-images.githubusercontent.com/26400438/127840221-4a3acf72-9593-4b07-bd15-bf7e609a4bb8.png)
 
 #### Capturing the Logs
-![Metric_log](https://user-images.githubusercontent.com/26400438/127416342-7b433175-b985-4701-b8ee-720eb87249be.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127840346-fca56978-506f-4dcb-96e9-ff57a215e00b.png)
 
-
-#### Run Details Widget - Model completion
-![HyperDrive_Run_Details_Widget_3](https://user-images.githubusercontent.com/26400438/127315262-7d8518e1-990c-4b29-9e15-e87a05ff18c6.PNG)
 
 #### Results from the Best Model 
 
-The best model has an accuracy of 0.85492
+The best model has an accuracy of 0.75
 
-![HD_Best_run_4](https://user-images.githubusercontent.com/26400438/127315588-16203112-9411-4a3f-b30e-2e528e7c46b4.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127840535-a2f53df0-317c-4e4e-817f-c3931fe7ec29.png)
 
 #### Parameters of the Best Model
 
-1.C = 6.65
+1.C = 8.94
 
-2.max_iter = 50
+2.max_iter = 100
 
-![HD_model_Save](https://user-images.githubusercontent.com/26400438/127315436-226b6d28-be79-4a38-a88c-ec81fb2b5fb1.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127840631-125f70dd-5a6f-488f-b61f-978ad3b03ba6.png)
 
 #### Scope for Improvement
 
@@ -168,8 +262,8 @@ Comparing the performances of the Best models from the AutoML Run and the Hyperd
 
 | Method      | Primary Metric |
 | ----------- |--------------- |
-| AutoML      |0.946           |
-| HyperDrive  |0.854           |
+| AutoML      |0.87            |
+| HyperDrive  |0.75            |
 
 The model chosen for deployment is the Best Childrun from the AUTOML which is the Voting Ensemble model and is deployed as ACI Webservice.When we deploy a model as an ACIWebService in Azure Machine Learning Service, we do not need to specify any deployment_target but we need to provide the Environment details (file: env.yaml)
 
@@ -186,24 +280,29 @@ The model chosen for deployment is the Best Childrun from the AUTOML which is th
 3.ACIWebservice spins an instance based on the Specification
 
 Snapshot of Deployed model with the rest API
-![model_endpoint_healthy](https://user-images.githubusercontent.com/26400438/127417294-0386dbd4-87f8-495b-a545-b6f8ee0bac8c.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127841034-0f7ea44b-fb30-4fa5-9a2f-e53721cee61c.png)
+
+
+![image](https://user-images.githubusercontent.com/26400438/127841162-343407d2-4844-4731-9bf1-e74d55663dab.png)
+
+
 
 ##### Querying the deployed rest API:
 
-The Consume section in the API provides details on querying the API.Below is the screen shot of steps used in scoring for 100 records in one go
+The Consume section in the API provides details on querying the API.Below is the screen shot of steps used in scoring few records in one go
 Using the run function returns the response.
 
     response = aci_service.run(test_data)
 
-![web_service_test](https://user-images.githubusercontent.com/26400438/127417430-c74555ad-6000-4ba1-a457-2468ae2ca718.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127841262-06c099c6-7e3e-4098-b354-f965318afb00.png)
 
 #### Log of Web Service
 
-![web_service_logs](https://user-images.githubusercontent.com/26400438/127419102-ac6931ff-25f2-4db1-96b6-5b43628d2161.PNG)
+![image](https://user-images.githubusercontent.com/26400438/127841365-529eda83-2dd1-4310-9326-ad2bab01f641.png)
 
 ## Screen Recording
 Link to the screen recording
 
-https://www.youtube.com/watch?v=zn8DdMNb0qs&t=8s
+
 
 
