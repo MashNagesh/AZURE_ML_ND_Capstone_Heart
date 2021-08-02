@@ -1,4 +1,4 @@
-#  MNIST CLASIFICATION -CAPSTONE PROJECT - AZURE ML ENGINEER 
+#  HEART FAILURE  CLASIFICATION -CAPSTONE PROJECT - AZURE ML ENGINEER 
 
 This Capstone project is part of the Azure ML Engineer NanoDegree.The Key components that were covered as part of the project areas follows:
 
@@ -283,11 +283,11 @@ The model chosen for deployment is the Best Childrun from the AUTOML which is th
 3.ACIWebservice spins an instance based on the Specification
 
 Snapshot of Deployed model with the rest API
+
 ![image](https://user-images.githubusercontent.com/26400438/127841034-0f7ea44b-fb30-4fa5-9a2f-e53721cee61c.png)
 
 
 ![image](https://user-images.githubusercontent.com/26400438/127841162-343407d2-4844-4731-9bf1-e74d55663dab.png)
-
 
 
 ##### Querying the deployed rest API:
